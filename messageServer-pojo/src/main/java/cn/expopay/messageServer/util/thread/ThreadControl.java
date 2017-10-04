@@ -87,35 +87,19 @@ public class ThreadControl {
 
     public static ThreadPoolExecutor getbalancing(){
         List<ThreadPoolExecutor> list = getThreadPoolExecutor();
-        Map<Integer, Integer> activeCountMap = new HashMap<Integer, Integer>();
-        for(int i = 0; i < list.size(); i++){
-            activeCountMap.put(i, list.get(i).getActiveCount());
-        }
-        Integer key = getMinValue2Key(activeCountMap);
-        if(key != null){
-            activeCountMap = null;
-            return list.get(key);
-        }
-        return null;
-    }
-
-    public static Integer getMinValue2Key(Map<Integer, Integer> map) {
-        if (map == null) return null;
-        Collection<Integer> c = map.values();
-        Object[] obj = c.toArray();
-        Arrays.sort(obj);
-        int minValue = Integer.valueOf(obj[0].toString());
-
-        Iterator it = map.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<Integer, Integer> entry = (Map.Entry<Integer, Integer>) it.next();
-            if (entry != null && entry.getValue() == minValue) {
-                return(entry.getKey());
+        int serialNumber = 0;
+        if(list != null && list.size() > 1) {
+            for(int i = 0; i < list.size()-1; i++){
+                if(list.get(i).getActiveCount() < list.get(i + 1).getActiveCount()) {
+                    serialNumber = i;
+                }
             }
+            return list.get(serialNumber);
+        }else if(list != null && list.size() == 1){
+            return list.get(serialNumber);
         }
         return null;
     }
-
 
     public static void destory() {
         if(ThreadControlHandler.tc.newRetractedThreadPool() != null && ThreadControlHandler.tc.newRetractedThreadPool().size() > 0) {
