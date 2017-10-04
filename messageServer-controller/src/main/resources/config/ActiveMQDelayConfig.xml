@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<delay >
+		<item id="1">60</item>
+		<item id="2" unit="m">1</item>
+		<item id="3" unit="m">1</item>
+		<item id="4" unit="m">1</item>
+		<item id="5" unit="m">3</item>
+		<item id="6" unit="m">4</item>
+		<item id="7" unit="m">2</item>
+		<item id="8" unit="m">3</item>
+		<item id="9" unit="m">2</item>
+		<item id="10" unit="m">1</item>
+	</delay>
+</root>

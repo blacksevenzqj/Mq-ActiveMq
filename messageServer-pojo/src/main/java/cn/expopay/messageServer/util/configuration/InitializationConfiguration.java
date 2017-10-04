@@ -1,0 +1,34 @@
+package cn.expopay.messageServer.util.configuration;
+
+import cn.expopay.messageServer.util.configuration.Initializationconfig.ActiveMQDelayConfig;
+import cn.expopay.messageServer.util.configuration.Initializationconfig.RsaKeyConfig;
+import cn.expopay.messageServer.util.thread.ThreadControl;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+
+@Component
+public class InitializationConfiguration {
+
+    @PostConstruct
+    public void init(){
+        ActiveMQDelayConfig activeMQDelayConfig = new ActiveMQDelayConfig();
+        activeMQDelayConfig.init();
+
+        RsaKeyConfig RsaKeyConfig = new RsaKeyConfig();
+        RsaKeyConfig.init();
+
+        ThreadControl.getThreadPoolExecutor();
+    }
+
+    @PreDestroy
+    public void dostory(){
+        ThreadControl.destory();
+    }
+
+
+
+}

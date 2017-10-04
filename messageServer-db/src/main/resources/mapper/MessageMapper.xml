@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.expopay.messageServer.dao.MessageDao">
+
+
+	<parameterMap id="queueMessageStore" type="cn.expopay.messageServer.model.store.QueueMessageStore"/>
+
+	<insert id="insertMessageInfo" parameterMap="queueMessageStore" useGeneratedKeys="true" keyProperty="id">
+		insert into MessageStatus(
+		send_id, sendTime, receptionUrl, backUrl, dataContent, headerContent, reqSucessMatch, keyVersion,
+		signSendSender, totalNum, totalBackNum, requestMode, recode_request, remessage_request, recontent_request,
+		signSendMq_request,
+		recode_one, remessage_one, recontent_one, againTime, currentNum, delay_value, current_stage, process_end_send, process_end_back, backTime, endTime, updateTime
+		)
+		values
+		(
+		#{queueMessage.sendMessage.sendId}, #{queueMessage.sendMessage.sendTime}, #{queueMessage.sendMessage.receptionUrl},
+		#{queueMessage.sendMessage.backUrl}, #{queueMessage.sendMessage.dataContent}, #{queueMessage.sendMessage.headerContent},
+		#{queueMessage.sendMessage.reqSucessMatch}, #{queueMessage.sendMessage.keyVersion}, #{queueMessage.sendMessage.signSendSender},
+		#{queueMessage.sendMessage.totalNum}, #{queueMessage.sendMessage.totalBackNum}, #{queueMessage.sendMessage.requestMode},
+
+		#{returnRequest.code},
+		#{returnRequest.msg},
+		#{returnRequest.content},
+		#{returnRequest.signSendMq},
+
+		#{returnOne.code},
+		#{returnOne.msg},
+		#{returnOne.content},
+		#{queueMessage.againTime, jdbcType=VARCHAR},
+		#{queueMessage.currentNum},
+		#{delayValue},
+		#{currentStage},
+		#{processEndSend},
+		#{processEndBack},
+		#{backTime, jdbcType=VARCHAR},
+		#{endTime, jdbcType=VARCHAR},
+		#{updateTime, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateMessageInfo" parameterMap="queueMessageStore">
+		update
+		messagestatus
+		set
+		<if test="queueMessage != null and queueMessage.againTime != null and queueMessage.againTime != ''">
+			againTime = #{queueMessage.againTime},
+		</if>
+		<if test="queueMessage != null and queueMessage.currentNum != null and queueMessage.currentNum != 0">
+			currentNum = #{queueMessage.currentNum},
+		</if>
+
+		<if test="delayValue != null and delayValue != 0">
+			delay_value = #{delayValue},
+		</if>
+		<if test="delayBackValue != null and delayBackValue != 0">
+			delayBack_value = #{delayBackValue},
+		</if>
+
+		<if test="returnOne != null and returnOne.code != null and returnOne.code != 0">
+			recode_one = #{returnOne.code},
+		</if>
+		<if test="returnOne != null and returnOne.msg != null and returnOne.msg != ''">
+			remessage_one = #{returnOne.msg},
+		</if>
+		<if test="returnOne != null and returnOne.content != null and returnOne.content != ''">
+			recontent_one = #{returnOne.content},
+		</if>
+
+		<if test="returnAgain != null and returnAgain.code != null and returnAgain.code != 0">
+			recode_again = #{returnAgain.code},
+		</if>
+		<if test="returnAgain != null and returnAgain.msg != null and returnAgain.msg != ''">
+			remessage_again = #{returnAgain.msg},
+		</if>
+		<if test="returnAgain != null and returnAgain.content != null and returnAgain.content != ''">
+			recontent_again = #{returnAgain.content},
+		</if>
+
+		<if test="backTime != null and backTime != ''">
+			backTime = #{backTime},
+		</if>
+		<if test="backAgainTime != null and backAgainTime != ''">
+			backAgainTime = #{backAgainTime},
+		</if>
+
+		<if test="currentBackNum != null and currentBackNum != 0">
+			currentBackNum = #{currentBackNum},
+		</if>
+
+		<if test="returnBack != null and returnBack.code != null and returnBack.code != 0">
+			recode_back = #{returnBack.code},
+		</if>
+		<if test="returnBack != null and returnBack.msg != null and returnBack.msg != ''">
+			remessage_back = #{returnBack.msg},
+		</if>
+		<if test="returnBack != null and returnBack.content != null and returnBack.content != ''">
+			recontent_back = #{returnBack.content},
+		</if>
+		<if test="returnBack != null and returnBack.signBackSender != null and returnBack.signBackSender != ''">
+			signBackSender_back = #{returnBack.signBackSender},
+		</if>
+
+		<if test="returnBackAgain != null and returnBackAgain.code != null and returnBackAgain.code != 0">
+			recode_back_again = #{returnBackAgain.code},
+		</if>
+		<if test="returnBackAgain != null and returnBackAgain.msg != null and returnBackAgain.msg != ''">
+			remessage_back_again = #{returnBackAgain.msg},
+		</if>
+		<if test="returnBackAgain != null and returnBackAgain.content != null and returnBackAgain.content != ''">
+			recontent_back_again = #{returnBackAgain.content},
+		</if>
+		<if test="returnBackAgain != null and returnBackAgain.signBackSender != null and returnBackAgain.signBackSender != ''">
+			signBackSender_back_again = #{returnBackAgain.signBackSender},
+		</if>
+
+		<if test="endTime != null and endTime != ''">
+			endTime = #{endTime},
+		</if>
+		<if test="currentStage != null and currentStage != 0">
+			current_stage = #{currentStage},
+		</if>
+		<if test="processEndSend != null and processEndSend != 0">
+			process_end_send = #{processEndSend},
+		</if>
+		<if test="processEndBack != null and processEndBack != 0">
+			process_end_back = #{processEndBack},
+		</if>
+
+		<if test="updateTime != null and updateTime != ''">
+			updateTime = #{updateTime}
+		</if>
+
+		where
+
+		<if test="queueMessage != null and queueMessage.sendMessage != null and queueMessage.sendMessage.sendId != null and queueMessage.sendMessage.sendId != ''">
+			send_id = #{queueMessage.sendMessage.sendId}
+		</if>
+		<if test="tempId != null and tempId != ''">
+			send_id = #{tempId}
+		</if>
+
+	</update>
+
+
+</mapper>

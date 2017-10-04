@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<delay >
+		<item id="http://localhost:8081/queuemq/back">one</item>
+		<item id="http://127.0.0.1:8081/queuemq/back">two</item>
+	</delay>
+</root>

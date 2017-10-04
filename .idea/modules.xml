@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/messageServer-business/messageServer-business.iml" filepath="$PROJECT_DIR$/messageServer-business/messageServer-business.iml" />
+      <module fileurl="file://$PROJECT_DIR$/messageServer-controller/messageServer-controller.iml" filepath="$PROJECT_DIR$/messageServer-controller/messageServer-controller.iml" />
+      <module fileurl="file://$PROJECT_DIR$/messageServer-db/messageServer-db.iml" filepath="$PROJECT_DIR$/messageServer-db/messageServer-db.iml" />
+      <module fileurl="file://$PROJECT_DIR$/messageServer-mq/messageServer-mq.iml" filepath="$PROJECT_DIR$/messageServer-mq/messageServer-mq.iml" />
+      <module fileurl="file://$PROJECT_DIR$/messageServer-pojo/messageServer-pojo.iml" filepath="$PROJECT_DIR$/messageServer-pojo/messageServer-pojo.iml" />
+      <module fileurl="file://$PROJECT_DIR$//messageServermanager.iml" filepath="$PROJECT_DIR$//messageServermanager.iml" />
+    </modules>
+  </component>
+</project>
