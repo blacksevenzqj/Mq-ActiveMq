@@ -21,6 +21,9 @@ public class InitializationConfiguration {
         RsaKeyConfig.init();
 
         ThreadControl.getThreadPoolExecutor();
+
+        // Akka初始化
+        ActorFactory.getMasterActorRef();
     }
 
     @PreDestroy

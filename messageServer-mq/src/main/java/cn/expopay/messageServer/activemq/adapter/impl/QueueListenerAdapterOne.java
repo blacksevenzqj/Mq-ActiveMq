@@ -45,12 +45,17 @@ public class QueueListenerAdapterOne implements IQueueListener {
 				long timeStartNew = System.currentTimeMillis();
 				logger.info("多线程 " + ai.incrementAndGet() + " 进入了");
 
-				// 异步方法（非阻塞）
-				ActorFactory.getMasterActorRef().tell(message, ActorRef.noSender());
-
+				// 1、线程池的方式
 //				QueueListenerThreadSend thread = new QueueListenerThreadSend(message, queueOneLocalProcessing, producerServiceSend, producerServiceBack);
 //				ThreadControl.getbalancing().execute(thread);
 
+				/**
+				 * 2、换为Akka的Actor的方式测试：
+				 * tell发送方法为：异步方法（非阻塞）。但是Actor的onReceive接收方法是单线程阻塞方法
+				 */
+				ActorFactory.getMasterActorRef().tell(message, ActorRef.noSender());
+
+				// 测试本类中注解了@Async的receiveMessage方法为异步方法。
 				Thread.currentThread().sleep(6000);
 
 				long timeEndNew = System.currentTimeMillis();

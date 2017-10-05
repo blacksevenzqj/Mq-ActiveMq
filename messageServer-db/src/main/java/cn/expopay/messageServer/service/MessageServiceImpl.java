@@ -1,5 +1,6 @@
 package cn.expopay.messageServer.service;
 
+import cn.expopay.messageServer.Interface.dbservce.IMessageService;
 import cn.expopay.messageServer.dao.MessageDao;
 import cn.expopay.messageServer.model.store.QueueMessageStore;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,6 @@
 package cn.expopay.messageServer.controller;
 
+import cn.expopay.messageServer.Interface.dbservce.IMessageService;
 import cn.expopay.messageServer.model.back.BackMessage;
 import cn.expopay.messageServer.model.queue.QueueMessage;
 import cn.expopay.messageServer.model.returninfo.ReturnT;
@@ -7,7 +8,6 @@ import cn.expopay.messageServer.model.rsa.RsaConfigModel;
 import cn.expopay.messageServer.model.send.SendMessage;
 import cn.expopay.messageServer.model.store.QueueMessageStore;
 import cn.expopay.messageServer.model.returninfo.ReturnSender;
-import cn.expopay.messageServer.service.IMessageService;
 import cn.expopay.messageServer.util.encryption.RsaParameterValidation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

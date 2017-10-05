@@ -1,7 +1,7 @@
-package cn.expopay.messageServer.processing.impl;
+package cn.expopay.messageServer.util.akka.actor;
 
-import cn.expopay.messageServer.Interface.dbservce.IMessageService;
-import cn.expopay.messageServer.Interface.localprocess.AbstractQueueLocalProcessing;
+import akka.actor.ActorRef;
+import akka.actor.UntypedActor;
 import cn.expopay.messageServer.Interface.producer.IProducerService;
 import cn.expopay.messageServer.model.back.BackMessage;
 import cn.expopay.messageServer.model.queue.BackQueueMessage;
@@ -10,8 +10,9 @@ import cn.expopay.messageServer.model.returninfo.ReturnSender;
 import cn.expopay.messageServer.model.returninfo.ReturnT;
 import cn.expopay.messageServer.model.rsa.RsaConfigModel;
 import cn.expopay.messageServer.model.store.QueueMessageStore;
-import cn.expopay.messageServer.util.configuration.interfice.IMessageContent;
 import cn.expopay.messageServer.util.configuration.Initializationconfig.ActiveMQDelayConfig;
+import cn.expopay.messageServer.util.configuration.interfice.IMessageContent;
+import cn.expopay.messageServer.util.container.SpringUtils;
 import cn.expopay.messageServer.util.dateutil.DateUtil;
 import cn.expopay.messageServer.util.encryption.RsaParameterValidation;
 import cn.expopay.messageServer.util.http.HttpManagerSendClient;
@@ -19,34 +20,44 @@ import cn.expopay.messageServer.util.resultsvalidation.ResultsCodeValidation;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
-@Service(value = "queueOneLocalProcessing")
-public class QueueOneLocalProcessing extends AbstractQueueLocalProcessing {
+public class HttpClientActor extends UntypedActor {
 
-    private final Logger logger = LoggerFactory.getLogger(QueueOneLocalProcessing.class);
+    private final Logger logger = LoggerFactory.getLogger(HttpClientActor.class);
 
-    @Autowired
-    private IMessageService messageService;
+    private ActorRef dbActor = null;
 
-    @Autowired
-    private HttpManagerSendClient httpManagerSendClient;
+    public HttpClientActor(ActorRef dbActor) {
+        this.dbActor = dbActor;
+        logger.info("HttpClientActor 初始化");
+    }
 
     @Override
-    public void queueLocalProcessing(Object obj, IProducerService producerServiceSend, IProducerService producerServiceBack) {
+    public void onReceive(Object message) throws Exception {
+        if(message instanceof String){
+            logger.info("HttpClientActor 接收到的是 String");
+        }else if(message instanceof QueueMessage){
+            logger.info("HttpClientActor 接收到的是 QueueMessage");
+            QueueMessage qm = (QueueMessage) message;
+            doHttpResult(qm);
+        }else{
+            unhandled(message);
+        }
+    }
+
+    private void doHttpResult(QueueMessage qm){
         boolean serviceAgain = false;
         long delayTime = 0;
         BackQueueMessage backQueueMessage = null;
         boolean serviceBack = false;
 
-        QueueMessage qm = (QueueMessage) obj;
         QueueMessageStore queueMessageStore = new QueueMessageStore();
 
+        HttpManagerSendClient httpManagerSendClient = (HttpManagerSendClient)SpringUtils.getBean("httpManagerSendClient");
         ReturnT<String> callbackResult = httpManagerSendClient.sendRequest(qm.getSendMessage().getReceptionUrl(), qm.getSendMessage());
-        logger.info("QueueOneLocalProcessing ReturnT<String> callbackResult is " + callbackResult);
+        logger.info("HttpClientActor ReturnT<String> callbackResult is " + callbackResult);
 
         queueMessageStore.setReturnOne(callbackResult);
         queueMessageStore.setCurrentStage(IMessageContent.GeneralStateOne);
@@ -56,7 +67,7 @@ public class QueueOneLocalProcessing extends AbstractQueueLocalProcessing {
             queueMessageStore.setProcessEndSend(IMessageContent.GeneralStateThree);
         } else if (callbackResult == null || callbackResult.getCode() != IMessageContent.HttpCodeSucess) {
             delayTime = ActiveMQDelayConfig.delayConfig.get(String.valueOf(IMessageContent.GeneralStateOne));
-            logger.info("QueueOneLocalProcessing 子线程第一次延迟队列执行：");
+            logger.info("HttpClientActor 子线程第一次延迟队列执行：");
             qm.setCurrentNum(IMessageContent.GeneralStateOne);
             qm.setAgainTime(DateUtil.formatNoCharDate(new Date()));
             queueMessageStore.setDelayValue(delayTime);
@@ -99,7 +110,7 @@ public class QueueOneLocalProcessing extends AbstractQueueLocalProcessing {
 
                         serviceBack = true;
                     } else {
-                        logger.error("QueueOneLocalProcessing are back is error " + IMessageContent.BackMessageSignFail);
+                        logger.error("HttpClientActor are back is error " + IMessageContent.BackMessageSignFail);
                         queueMessageStore.setProcessEndBack(IMessageContent.GeneralStateThree);
                         ReturnSender returnSender = new ReturnSender();
                         returnSender.setCode(IMessageContent.HttpCodeFail);
@@ -108,7 +119,7 @@ public class QueueOneLocalProcessing extends AbstractQueueLocalProcessing {
                         queueMessageStore.setEndTime(DateUtil.formatNoCharDate(new Date()));
                     }
                 } catch (Exception e) {
-                    logger.error("QueueOneLocalProcessing " + IMessageContent.BackMessageKeyVersion + keyVersion + " and Exception is " + e.getMessage());
+                    logger.error("HttpClientActor " + IMessageContent.BackMessageKeyVersion + keyVersion + " and Exception is " + e.getMessage());
                     queueMessageStore.setProcessEndBack(IMessageContent.GeneralStateThree);
                     ReturnSender rs = new ReturnSender();
                     rs.setCode(IMessageContent.HttpCodeFail);
@@ -123,12 +134,17 @@ public class QueueOneLocalProcessing extends AbstractQueueLocalProcessing {
 
         queueMessageStore.setQueueMessage(qm);
         queueMessageStore.setUpdateTime(DateUtil.formatNoCharDate(new Date()));
-        messageService.updateMessageInfo(queueMessageStore); // 改为更新操作
+//        messageService.updateMessageInfo(queueMessageStore); // 改为更新操作
+        dbActor.tell(queueMessageStore, ActorRef.noSender());
 
         if (serviceAgain) {
+            IProducerService producerServiceSend = (IProducerService)SpringUtils.getBean("producerServiceSend");
             producerServiceSend.publishConvertPostProcessor("queueAgain" ,qm, delayTime);
+
         } else if (serviceBack) {
+            IProducerService producerServiceBack = (IProducerService)SpringUtils.getBean("producerServiceBack");
             producerServiceBack.sendMessage("queueBack", backQueueMessage);
         }
     }
+
 }

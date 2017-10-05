@@ -1,5 +1,6 @@
 package cn.expopay.messageServer.service;
 
+import cn.expopay.messageServer.Interface.dbservce.IMessageService;
 import cn.expopay.messageServer.Interface.producer.IProducerService;
 import cn.expopay.messageServer.model.queue.QueueMessage;
 import cn.expopay.messageServer.model.returninfo.ReturnMq;
