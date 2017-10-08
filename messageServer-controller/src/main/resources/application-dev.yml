@@ -49,4 +49,41 @@ mybatis:
 logging:
   config: classpath:config/logback/logback-spring.xml
 
-
+# 接口配置
+messageContent:
+  send:
+    sendMessageTotalNum: 10
+    sendMessageTotalBackNum: 10
+    sendMessageKeyIsNull: KeyVersion 参数为Null 或 空字符串
+    sendMessageSucess: 请求消息服务系统：成功
+    sendMessageBackSignFail: 请求消息服务系统：返回加签失败
+  back:
+    backMessageSignFail: 消息服务系统：回复加签失败
+    backMessageKeyVersion: 消息服务系统：回复消息失败，keyVersion版本是
+    backMessageFromSenderSignatureFailStr: 消息中间件系统：接收Sender返回信息验签失败
+  generalState:
+    generalStateOne: 1
+    generalStateTwo: 2
+    generalStateThree: 3
+    generalStateFour: 4
+  http:
+    connectionRequestTimeout: 1000
+    socketTimeout: 1000
+    connectTimeout: 1000
+    httpCodeSucess: 200
+    httpCodeFail: 500
+  notExecut:
+    httpCodeUnMediaType: 415
+    httpSendRequestParameterError: 10001
+    httpSendRequestParameterErrorStr: HttpManagerClient sendRequest parameter is error
+    httpSendRequestTypeError: 10002
+    httpSendRequestTypeErrorStr: HttpManagerClient sendRequest parameter requestMode is error NotMatch RequestType
+    httpBackRequestParameterError: 10003
+    backMessageFromSenderSignatureError: 10004
+    backMessageFromSenderResponseNotJSON: 10005
+    backMessageFromSenderHttpEntityIsNull: 10006
+    sendMessageSignatureFail: 10007
+    sendMessageSignatureFailStr: 请求消息服务系统：验签失败
+    sendMessageKeyVersionIsError: 10008
+    sendMessageKeyVersionIsErrorStr: keyVersion 版本号异常，没有与之对应的版本号，请检查核对
+    returnSignParamterLastErrorStr: 返回加签：keyVersion 版本号异常，没有与之对应的版本号，请检查核对

@@ -8,6 +8,7 @@ import cn.expopay.messageServer.model.rsa.RsaConfigModel;
 import cn.expopay.messageServer.model.send.SendMessage;
 import cn.expopay.messageServer.model.store.QueueMessageStore;
 import cn.expopay.messageServer.model.returninfo.ReturnSender;
+import cn.expopay.messageServer.util.configuration.MessageContentConfiguration;
 import cn.expopay.messageServer.util.encryption.RsaParameterValidation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,9 @@ public class TestControl {
 
     @Autowired
     IMessageService messageService;
+
+    @Autowired
+    MessageContentConfiguration messageContentConfiguration;
 
     //模拟第三个系统：消息接收方，接收消息
     @RequestMapping(value = "/queuemq/receive")
@@ -117,6 +121,12 @@ public class TestControl {
 
     @RequestMapping(value = "/queuemq/myTestRead")
     public String myTestRead(HttpServletRequest request) {
+        logger.info("测试：" + messageContentConfiguration.getMessageContentSend());
+        logger.info("测试：" + messageContentConfiguration.getMessageContentBack());
+        logger.info("测试：" + messageContentConfiguration.getMessageContentGeneralState());
+        logger.info("测试：" + messageContentConfiguration.getMessageContentHttp());
+        logger.info("测试：" + messageContentConfiguration.getMessageContentNotExecut());
+
         return "123";
     }
 

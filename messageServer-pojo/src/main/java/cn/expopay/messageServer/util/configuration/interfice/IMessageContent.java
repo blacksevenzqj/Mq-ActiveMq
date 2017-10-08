@@ -38,7 +38,9 @@ public interface IMessageContent {
     public static final int HttpCodeSucess = 200;
     public static final int HttpCodeFail = 500;
 
-    //不继续执行：
+    /**
+     * 不继续执行
+     */
     // MIMIE请求类型错误
     public static final int HttpCodeUnMediaType = 415;
     public static final int HttpSendRequestParameterError = 10001;

@@ -7,24 +7,32 @@ import cn.expopay.messageServer.model.rsa.RsaConfigModel;
 import cn.expopay.messageServer.model.send.SendMessage;
 import cn.expopay.messageServer.util.configuration.interfice.IMessageContent;
 import cn.expopay.messageServer.util.configuration.Initializationconfig.RsaKeyConfig;
+import cn.expopay.messageServer.util.container.SpringUtils;
 import cn.expopay.messageServer.util.validate.ValidationUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import cn.expopay.messageServer.util.configuration.MessageContentConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 public class RsaParameterValidation {
 
     private static Logger logger = LoggerFactory.getLogger(RsaParameterValidation.class);
 
+    private static MessageContentConfiguration messageContentConfiguration = (MessageContentConfiguration)SpringUtils.getBean("messageContentConfiguration");
+
     public static ReturnMq checkParamter(Object obj){
         ReturnMq rmq = new ReturnMq();
-        rmq.setCode(IMessageContent.HttpCodeFail);
+//        rmq.setCode(IMessageContent.HttpCodeFail);
+        System.out.println(messageContentConfiguration.getMessageContentHttp());
+        rmq.setCode(messageContentConfiguration.getMessageContentHttp().getHttpCodeFail());
         if (obj instanceof SendMessage) {
             RsaConfigModel rsaConfigModel = null;
             SendMessage sendMessage = (SendMessage) obj;
             if (StringUtils.isBlank(sendMessage.getKeyVersion())) {
-                rmq.setMsg(IMessageContent.SendMessageKeyIsNull);
+//                rmq.setMsg(IMessageContent.SendMessageKeyIsNull);
+                rmq.setMsg(messageContentConfiguration.getMessageContentSend().getSendMessageKeyIsNull());
                 return rmq;
             }
             // 拿取对应的KeyVersion版本号
