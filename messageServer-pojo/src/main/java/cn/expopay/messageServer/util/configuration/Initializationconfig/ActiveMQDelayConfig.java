@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class ActiveMQDelayConfig {
 
-    private Logger logger = LoggerFactory.getLogger(ActiveMQDelayConfig.class);
+    private static final Logger logger = LoggerFactory.getLogger(ActiveMQDelayConfig.class);
 
     public static final Map<String, Long> delayConfig = new HashMap<String, Long>();
 
@@ -95,7 +95,7 @@ public class ActiveMQDelayConfig {
     }
 
     public static void p(Object o) {
-        System.out.println(o);
+        logger.info("--->" + o);
     }
 
 }

@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class RsaKeyConfig {
 
-    private Logger logger = LoggerFactory.getLogger(RsaKeyConfig.class);
+    private static final Logger logger = LoggerFactory.getLogger(RsaKeyConfig.class);
 
     public static final Map<String, RsaConfigModel> keyModel = new HashMap<String, RsaConfigModel>();
 
@@ -104,7 +104,7 @@ public class RsaKeyConfig {
     }
 
     public static void p(Object o) {
-        System.out.println(o);
+        logger.info("--->" + o);
     }
 
 }

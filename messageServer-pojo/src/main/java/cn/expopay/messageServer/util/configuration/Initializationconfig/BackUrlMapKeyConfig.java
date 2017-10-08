@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class BackUrlMapKeyConfig {
 
-    private Logger logger = LoggerFactory.getLogger(BackUrlMapKeyConfig.class);
+    private static final Logger logger = LoggerFactory.getLogger(BackUrlMapKeyConfig.class);
 
     public static final Map<String, String> url2Key = new HashMap<String, String>();
 
@@ -80,7 +80,7 @@ public class BackUrlMapKeyConfig {
     }
 
     public static void p(Object o) {
-        System.out.println(o);
+        logger.info("--->" + o);
     }
 
 }
