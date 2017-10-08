@@ -34,7 +34,7 @@ public class TestControl {
 //        logger.info("queueMqReceive is " + orderInfo);
         logger.info("queueMqReceive is " + dataContent);
         try {
-            Thread.currentThread().sleep(3000);
+//            Thread.currentThread().sleep(3000);
         }catch (Exception e){
             e.printStackTrace();
         }

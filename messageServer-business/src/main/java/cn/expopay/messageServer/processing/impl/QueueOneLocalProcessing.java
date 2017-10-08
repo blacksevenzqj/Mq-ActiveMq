@@ -16,6 +16,7 @@ import cn.expopay.messageServer.util.dateutil.DateUtil;
 import cn.expopay.messageServer.util.encryption.RsaParameterValidation;
 import cn.expopay.messageServer.util.http.HttpManagerSendClient;
 import cn.expopay.messageServer.util.resultsvalidation.ResultsCodeValidation;
+import com.codahale.metrics.Meter;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,9 @@ public class QueueOneLocalProcessing extends AbstractQueueLocalProcessing {
 
     @Autowired
     private HttpManagerSendClient httpManagerSendClient;
+
+    @Autowired
+    Meter consumers;
 
     @Override
     public void queueLocalProcessing(Object obj, IProducerService producerServiceSend, IProducerService producerServiceBack) {
@@ -64,6 +68,7 @@ public class QueueOneLocalProcessing extends AbstractQueueLocalProcessing {
             serviceAgain = true;
         } else {
             queueMessageStore.setProcessEndSend(IMessageContent.GeneralStateTwo);
+            consumers.mark();
         }
 
         if(!serviceAgain){
@@ -74,7 +79,7 @@ public class QueueOneLocalProcessing extends AbstractQueueLocalProcessing {
                 try {
                     RsaConfigModel rsaConfigModel = RsaParameterValidation.getRsaProperties(keyVersion);
                     if(rsaConfigModel == null){
-                        throw new RuntimeException(IMessageContent.SendMessageKeyVersionIsError);
+                        throw new RuntimeException(IMessageContent.SendMessageKeyVersionIsErrorStr);
                     }
 
                     BackMessage backMessage = new BackMessage();

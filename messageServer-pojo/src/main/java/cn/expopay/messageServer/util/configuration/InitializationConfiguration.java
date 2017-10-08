@@ -3,14 +3,24 @@ package cn.expopay.messageServer.util.configuration;
 import cn.expopay.messageServer.util.akka.actor.ActorFactory;
 import cn.expopay.messageServer.util.configuration.Initializationconfig.ActiveMQDelayConfig;
 import cn.expopay.messageServer.util.configuration.Initializationconfig.RsaKeyConfig;
+import cn.expopay.messageServer.util.configuration.metric.MetricConfig;
 import cn.expopay.messageServer.util.thread.ThreadControl;
+import com.codahale.metrics.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class InitializationConfiguration {
+
+    @Autowired
+    ConsoleReporter consoleReporter;
+
+    @Autowired
+    ScheduledReporter influxdbReporter;
 
     @PostConstruct
     public void init(){
@@ -24,6 +34,13 @@ public class InitializationConfiguration {
 
         // Akka初始化
         ActorFactory.getMasterActorRef();
+
+        // 启动Metric，单例形式
+//        MetricConfig.getMetricConfig().startMetric();
+
+        consoleReporter.start(10, TimeUnit.SECONDS);
+
+        influxdbReporter.start(10, TimeUnit.SECONDS);
     }
 
     @PreDestroy

@@ -9,10 +9,8 @@ public interface IMessageContent {
     public static final int SendMessageTotalBackNum = 10;
 
     public static final String SendMessageKeyIsNull = "KeyVersion 参数为Null 或 空字符串";
-    public static final String SendMessageKeyVersionIsError = "keyVersion 版本号异常，没有与之对应的版本号，请检查核对";
 
     public static final String SendMessageSucess = "请求消息服务系统：成功";
-    public static final String SendMessageSignatureFailStr = "请求消息服务系统：验签失败";
     public static final String SendMessageBackSignFail = "请求消息服务系统：返回加签失败";
 
     /**
@@ -57,8 +55,13 @@ public interface IMessageContent {
     public static final int BackMessageFromSenderResponseNotJSON = 10005;
     // 回复消息：请求返回实体为Null
     public static final int BackMessageFromSenderHttpEntityIsNull = 10006;
+
     // 验签失败
     public static final int SendMessageSignatureFail = 10007;
+    public static final String SendMessageSignatureFailStr = "请求消息服务系统：验签失败";
 
+    public static final int SendMessageKeyVersionIsError = 10008;
+    public static final String SendMessageKeyVersionIsErrorStr = "keyVersion 版本号异常，没有与之对应的版本号，请检查核对";
+    public static final String ReturnSignParamterLastErrorStr = "返回加签：keyVersion 版本号异常，没有与之对应的版本号，请检查核对";
 }
 

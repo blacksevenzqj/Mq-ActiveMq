@@ -85,7 +85,7 @@ public class HttpClientActor extends UntypedActor {
                 try {
                     RsaConfigModel rsaConfigModel = RsaParameterValidation.getRsaProperties(keyVersion);
                     if(rsaConfigModel == null){
-                        throw new RuntimeException(IMessageContent.SendMessageKeyVersionIsError);
+                        throw new RuntimeException(IMessageContent.SendMessageKeyVersionIsErrorStr);
                     }
 
                     BackMessage backMessage = new BackMessage();

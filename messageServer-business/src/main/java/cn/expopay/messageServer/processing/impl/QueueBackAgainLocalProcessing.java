@@ -53,7 +53,7 @@ public class QueueBackAgainLocalProcessing extends AbstractQueueLocalProcessing 
             try {
                 RsaConfigModel rsaConfigModel = RsaParameterValidation.getRsaProperties(keyVersion);
                 if(rsaConfigModel == null){
-                    throw new RuntimeException(IMessageContent.SendMessageKeyVersionIsError);
+                    throw new RuntimeException(IMessageContent.SendMessageKeyVersionIsErrorStr);
                 }
 
                 ObjectMapper om = new ObjectMapper();

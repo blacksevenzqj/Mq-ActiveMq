@@ -32,7 +32,8 @@ public class RsaParameterValidation {
             rsaConfigModel = getRsaProperties(keyVersion);
             if (rsaConfigModel == null) {
                 logger.error("RsaParameterValidation are checkParamter error ");
-                rmq.setMsg(IMessageContent.SendMessageKeyVersionIsError);
+                rmq.setCode(IMessageContent.SendMessageKeyVersionIsError);
+                rmq.setMsg(IMessageContent.SendMessageKeyVersionIsErrorStr);
                 return rmq;
             }
             String validateStr = ValidationUtil.validateModel(sendMessage);
@@ -89,7 +90,7 @@ public class RsaParameterValidation {
         RsaConfigModel rsaConfigModel = getRsaProperties(keyVersion);
         if(rsaConfigModel == null){
             logger.error("RsaParameterValidation are returnSignParamterLast error ");
-            rmq.setMsg(rmq.getMsg() + "。" + IMessageContent.SendMessageKeyVersionIsError);
+            rmq.setMsg(rmq.getMsg() + "。" + IMessageContent.ReturnSignParamterLastErrorStr);
             return rmq;
         }
         String signStr = returnSignParamter(rmq, rsaConfigModel.getPrivateKey());
