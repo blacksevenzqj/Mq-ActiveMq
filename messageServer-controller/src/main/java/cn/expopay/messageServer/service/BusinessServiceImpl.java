@@ -60,7 +60,8 @@ public class BusinessServiceImpl implements IBusinessService{
                 }
                 // 返回加签
                 if (rmq.getCode() != IMessageContent.SendMessageKeyVersionIsError &&
-                        rmq.getCode() != IMessageContent.SendMessageSignatureFail) {
+                        rmq.getCode() != IMessageContent.SendMessageSignatureFail &&
+                        rmq.getCode() != IMessageContent.SendMessageKeyIsNull) {
                     RsaParameterValidation.returnSignParamterLast(rmq, sendMessage);
                 }
             } else {

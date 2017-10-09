@@ -8,8 +8,6 @@ public interface IMessageContent {
     public static final int SendMessageTotalNum = 10;
     public static final int SendMessageTotalBackNum = 10;
 
-    public static final String SendMessageKeyIsNull = "KeyVersion 参数为Null 或 空字符串";
-
     public static final String SendMessageSucess = "请求消息服务系统：成功";
     public static final String SendMessageBackSignFail = "请求消息服务系统：返回加签失败";
 
@@ -65,5 +63,8 @@ public interface IMessageContent {
     public static final int SendMessageKeyVersionIsError = 10008;
     public static final String SendMessageKeyVersionIsErrorStr = "keyVersion 版本号异常，没有与之对应的版本号，请检查核对";
     public static final String ReturnSignParamterLastErrorStr = "返回加签：keyVersion 版本号异常，没有与之对应的版本号，请检查核对";
+
+    public static final int SendMessageKeyIsNull = 10009;
+    public static final String SendMessageKeyIsNullStr = "KeyVersion 参数为Null 或 空字符串";
 }
 

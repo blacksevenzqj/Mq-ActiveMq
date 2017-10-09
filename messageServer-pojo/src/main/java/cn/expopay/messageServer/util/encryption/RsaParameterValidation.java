@@ -31,8 +31,8 @@ public class RsaParameterValidation {
             RsaConfigModel rsaConfigModel = null;
             SendMessage sendMessage = (SendMessage) obj;
             if (StringUtils.isBlank(sendMessage.getKeyVersion())) {
-//                rmq.setMsg(IMessageContent.SendMessageKeyIsNull);
-                rmq.setMsg(messageContentConfiguration.getMessageContentSend().getSendMessageKeyIsNull());
+                rmq.setCode(IMessageContent.SendMessageKeyIsNull);
+                rmq.setMsg(IMessageContent.SendMessageKeyIsNullStr);
                 return rmq;
             }
             // 拿取对应的KeyVersion版本号
@@ -90,7 +90,7 @@ public class RsaParameterValidation {
     // 返回加签（最后阶段）
     public static ReturnMq returnSignParamterLast(ReturnMq rmq, SendMessage sendMessage){
         if(StringUtils.isBlank(sendMessage.getKeyVersion())){
-            rmq.setMsg(rmq.getMsg() + "。" + IMessageContent.SendMessageKeyIsNull);
+            rmq.setMsg(rmq.getMsg() + "。" + IMessageContent.SendMessageKeyIsNullStr);
             return rmq;
         }
         // 拿取对应的KeyVersion版本号
