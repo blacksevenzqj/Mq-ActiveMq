@@ -20,8 +20,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-
 @Service(value = "queueBackAgainLocalProcessing")
 public class QueueBackAgainLocalProcessing extends AbstractQueueLocalProcessing {
 
@@ -65,8 +63,8 @@ public class QueueBackAgainLocalProcessing extends AbstractQueueLocalProcessing 
 
                 if(ResultsCodeValidation.backRsultsCodeValidation(callbackResult.getCode())){
                     queueMessageStore.setProcessEndBack(IMessageContent.GeneralStateThree);
-                    queueMessageStore.setEndTime(DateUtil.formatNoCharDate(new Date()));
-                //如果第一次重试就请求成功，则将返回结果放入到回复队列中。
+                    queueMessageStore.setEndTime(DateUtil.formatNowDate());
+                    //如果第一次重试就请求成功，则将返回结果放入到回复队列中。
                 } else if (callbackResult == null || callbackResult.getCode() != IMessageContent.HttpCodeSucess){
                     if(currentBackNum < totalBackNum) {
                         int tempNum = currentBackNum + 1;
@@ -78,12 +76,12 @@ public class QueueBackAgainLocalProcessing extends AbstractQueueLocalProcessing 
                         backAgain = true;
                     }else{
                         queueMessageStore.setProcessEndBack(IMessageContent.GeneralStateThree);
-                        queueMessageStore.setEndTime(DateUtil.formatNoCharDate(new Date()));
+                        queueMessageStore.setEndTime(DateUtil.formatNowDate());
                         logger.info("消息回复当前重试次数为" + totalBackNum + "，超过" + totalBackNum + "了啊！！！");
                     }
                 }else {
                     queueMessageStore.setProcessEndBack(IMessageContent.GeneralStateTwo);
-                    queueMessageStore.setEndTime(DateUtil.formatNoCharDate(new Date()));
+                    queueMessageStore.setEndTime(DateUtil.formatNowDate());
                     logger.info("QueueListenerAdapterBackAgain 整個流程結束");
                 }
             }catch (Exception e){
@@ -93,7 +91,7 @@ public class QueueBackAgainLocalProcessing extends AbstractQueueLocalProcessing 
                 rs.setCode(IMessageContent.HttpCodeFail);
                 rs.setMsg(IMessageContent.BackMessageKeyVersion + keyVersion + " and Exception is " + e.getMessage());
                 queueMessageStore.setReturnBackAgain(rs);
-                queueMessageStore.setEndTime(DateUtil.formatNoCharDate(new Date()));
+                queueMessageStore.setEndTime(DateUtil.formatNowDate());
             }
         }else{
             logger.error("QueueListenerAdapterBackAgain " + IMessageContent.BackMessageKeyVersion + "null or is ''");
@@ -102,10 +100,10 @@ public class QueueBackAgainLocalProcessing extends AbstractQueueLocalProcessing 
             rs.setCode(IMessageContent.HttpCodeFail);
             rs.setMsg(IMessageContent.BackMessageKeyVersion + "null or is ''");
             queueMessageStore.setReturnBackAgain(rs);
-            queueMessageStore.setEndTime(DateUtil.formatNoCharDate(new Date()));
+            queueMessageStore.setEndTime(DateUtil.formatNowDate());
         }
 
-        queueMessageStore.setUpdateTime(DateUtil.formatNoCharDate(new Date()));
+        queueMessageStore.setUpdateTime(DateUtil.formatNowDate());
 //            logger.info("QueueListenerAdapterBackAgain are queueMessageStore is " + queueMessageStore);
         messageService.updateMessageInfo(queueMessageStore);
 

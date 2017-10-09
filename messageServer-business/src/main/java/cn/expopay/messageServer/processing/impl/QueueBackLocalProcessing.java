@@ -44,7 +44,7 @@ public class QueueBackLocalProcessing extends AbstractQueueLocalProcessing {
         queueMessageStore.setCurrentStage(IMessageContent.GeneralStateThree);
         queueMessageStore.setProcessEndBack(IMessageContent.GeneralStateOne);
 
-//			String keyVersion = BackUrlMapKeyConfig.url2Key.get(bqm.getBackUrl());
+//          String keyVersion = BackUrlMapKeyConfig.url2Key.get(bqm.getBackUrl());
         String keyVersion = bqm.getKeyVersion();
         if(StringUtils.isNotBlank(keyVersion)){
             try {
@@ -61,21 +61,21 @@ public class QueueBackLocalProcessing extends AbstractQueueLocalProcessing {
 
                 if(ResultsCodeValidation.backRsultsCodeValidation(callbackResult.getCode())){
                     queueMessageStore.setProcessEndBack(IMessageContent.GeneralStateThree);
-                    queueMessageStore.setEndTime(DateUtil.formatNoCharDate(new Date()));
+                    queueMessageStore.setEndTime(DateUtil.formatNowDate());
                 } else if (callbackResult == null || callbackResult.getCode() != IMessageContent.HttpCodeSucess) {
                     delayTime = ActiveMQDelayConfig.delayBackConfig.get(String.valueOf(IMessageContent.GeneralStateOne));
                     logger.info("回復消息：第一次延迟队列执行：");
                     bqm.setCurrentBackNum(IMessageContent.GeneralStateOne);
-                    bqm.setBackAgainTime(DateUtil.formatNoCharDate(new Date()));
+                    bqm.setBackAgainTime(DateUtil.formatNowDate());
 
                     queueMessageStore.setCurrentBackNum(IMessageContent.GeneralStateOne);
-                    queueMessageStore.setBackAgainTime(DateUtil.formatNoCharDate(new Date()));
+                    queueMessageStore.setBackAgainTime(DateUtil.formatNowDate());
                     queueMessageStore.setDelayBackValue(delayTime);
                     queueMessageStore.setCurrentStage(IMessageContent.GeneralStateFour);
                     backAgain = true;
                 } else {
                     queueMessageStore.setProcessEndBack(IMessageContent.GeneralStateTwo);
-                    queueMessageStore.setEndTime(DateUtil.formatNoCharDate(new Date()));
+                    queueMessageStore.setEndTime(DateUtil.formatNowDate());
                     // 結束
                     logger.info("QueueListenerAdapterBack 整個流程結束");
                 }
@@ -86,7 +86,7 @@ public class QueueBackLocalProcessing extends AbstractQueueLocalProcessing {
                 rs.setCode(IMessageContent.HttpCodeFail);
                 rs.setMsg(IMessageContent.BackMessageKeyVersion + keyVersion + " and Exception is " + e.getMessage());
                 queueMessageStore.setReturnBack(rs);
-                queueMessageStore.setEndTime(DateUtil.formatNoCharDate(new Date()));
+                queueMessageStore.setEndTime(DateUtil.formatNowDate());
             }
         }else{
             logger.error("QueueListenerAdapterBack " + IMessageContent.BackMessageKeyVersion + "null or is ''");
@@ -95,10 +95,10 @@ public class QueueBackLocalProcessing extends AbstractQueueLocalProcessing {
             rs.setCode(IMessageContent.HttpCodeFail);
             rs.setMsg(IMessageContent.BackMessageKeyVersion + "null or is ''");
             queueMessageStore.setReturnBack(rs);
-            queueMessageStore.setEndTime(DateUtil.formatNoCharDate(new Date()));
+            queueMessageStore.setEndTime(DateUtil.formatNowDate());
         }
 
-        queueMessageStore.setUpdateTime(DateUtil.formatNoCharDate(new Date()));
+        queueMessageStore.setUpdateTime(DateUtil.formatNowDate());
 //        logger.info("QueueListenerAdapterBack are queueMessageStore is " + queueMessageStore);
         messageService.updateMessageInfo(queueMessageStore);
 

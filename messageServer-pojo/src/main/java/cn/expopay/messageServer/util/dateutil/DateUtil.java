@@ -1,6 +1,9 @@
 package cn.expopay.messageServer.util.dateutil;
 
 import java.text.SimpleDateFormat;
+import java.time.DateTimeException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Pattern;
@@ -15,6 +18,21 @@ public class DateUtil {
     public static String TIMESTAMP_PATTERN = "yyyy-MM-dd HH:mm:ss";
     public static String TIMES_PATTERN = "HH:mm:ss";
     public static String NOCHAR_PATTERN = "yyyyMMddHHmmss";
+
+    private static final DateTimeFormatter java8format = DateTimeFormatter.ofPattern(NOCHAR_PATTERN);
+
+    /**
+     * 使用JAVA8的时间类
+     */
+    public static String formatNowDate() {
+        LocalDateTime arrivalDate = LocalDateTime.now();
+        try{
+            return arrivalDate.format(java8format);
+        }catch (DateTimeException ex){
+            return formatNoCharDate(new Date());
+        }
+    }
+
 
     /**
      * 获取当前时间戳

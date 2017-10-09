@@ -75,7 +75,7 @@ public class QueueAgainLocalProcessing extends AbstractQueueLocalProcessing {
 
         if(!serviceAgain){
             if(StringUtils.isNotBlank(qm.getSendMessage().getBackUrl())) {
-                queueMessageStore.setBackTime(DateUtil.formatNoCharDate(new Date()));
+                queueMessageStore.setBackTime(DateUtil.formatNowDate());
 
                 String keyVersion = qm.getSendMessage().getKeyVersion().toLowerCase();
                 try {
@@ -86,7 +86,7 @@ public class QueueAgainLocalProcessing extends AbstractQueueLocalProcessing {
 
                     BackMessage backMessage = new BackMessage();
                     backMessage.setSendId(qm.getSendMessage().getSendId());
-                    backMessage.setBackTime(DateUtil.formatNoCharDate(new Date()));
+                    backMessage.setBackTime(DateUtil.formatNowDate());
 
                     backMessage.setCode(callbackResult.getCode());
                     backMessage.setMsg(callbackResult.getMsg());
@@ -112,7 +112,7 @@ public class QueueAgainLocalProcessing extends AbstractQueueLocalProcessing {
                         returnSender.setCode(IMessageContent.HttpCodeFail);
                         returnSender.setMsg(IMessageContent.BackMessageSignFail);
                         queueMessageStore.setReturnBack(returnSender);
-                        queueMessageStore.setEndTime(DateUtil.formatNoCharDate(new Date()));
+                        queueMessageStore.setEndTime(DateUtil.formatNowDate());
                     }
                 } catch (Exception e) {
                     logger.error("QueueListenerAdapterAgain " + IMessageContent.BackMessageKeyVersion + keyVersion + " and Exception is " + e.getMessage());
@@ -121,15 +121,15 @@ public class QueueAgainLocalProcessing extends AbstractQueueLocalProcessing {
                     rs.setCode(IMessageContent.HttpCodeFail);
                     rs.setMsg(IMessageContent.BackMessageKeyVersion + keyVersion + " and Exception is " + e.getMessage());
                     queueMessageStore.setReturnBack(rs);
-                    queueMessageStore.setEndTime(DateUtil.formatNoCharDate(new Date()));
+                    queueMessageStore.setEndTime(DateUtil.formatNowDate());
                 }
             }else{
-                queueMessageStore.setEndTime(DateUtil.formatNoCharDate(new Date()));
+                queueMessageStore.setEndTime(DateUtil.formatNowDate());
             }
         }
 
         queueMessageStore.setQueueMessage(qm);
-        queueMessageStore.setUpdateTime(DateUtil.formatNoCharDate(new Date()));
+        queueMessageStore.setUpdateTime(DateUtil.formatNowDate());
 //        logger.info("QueueListenerAdapterAgain are queueMessageStore is " + queueMessageStore);
         messageService.updateMessageInfo(queueMessageStore);
 

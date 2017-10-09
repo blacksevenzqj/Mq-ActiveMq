@@ -95,13 +95,13 @@ public class BusinessServiceImpl implements IBusinessService{
             queueMessageStore.setQueueMessage(queueMessage);
 
             if (rmq.getCode() != IMessageContent.HttpCodeSucess) {
-                queueMessageStore.setUpdateTime(DateUtil.formatNoCharDate(new Date()));
-                queueMessageStore.setEndTime(DateUtil.formatNoCharDate(new Date()));
+                queueMessageStore.setUpdateTime(DateUtil.formatNowDate());
+                queueMessageStore.setEndTime(DateUtil.formatNowDate());
             }
         }else{
             queueMessageStore.setQueueMessage(queueMessage);
-            queueMessageStore.setUpdateTime(DateUtil.formatNoCharDate(new Date()));
-            queueMessageStore.setEndTime(DateUtil.formatNoCharDate(new Date()));
+            queueMessageStore.setUpdateTime(DateUtil.formatNowDate());
+            queueMessageStore.setEndTime(DateUtil.formatNowDate());
         }
         queueMessageStore.setReturnRequest(rmq);
         messageService.insertMessageInfo(queueMessageStore);
