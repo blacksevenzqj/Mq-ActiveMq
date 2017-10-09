@@ -1,6 +1,7 @@
 package cn.expopay.messageServer.activemq.configuration;
 
 import cn.expopay.messageServer.activemq.adapter.IQueueListener;
+import cn.expopay.messageServer.util.configuration.interfice.IMessageContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,26 +15,21 @@ import javax.jms.Queue;
 @Configuration
 public class JmsConfig {
 
-    public final static String QueueOne = "queueOne";
-    public final static String QueueAgain = "queueAgain";
-    public final static String QueueBack = "queueBack";
-    public final static String QueueBackAgain = "queueBackAgain";
-
-    @Bean(name = "queueOne")
+    @Bean(name = IMessageContent.QueueOne)
     public Queue queueOne() {
-        return new ActiveMQQueue(QueueOne);
+        return new ActiveMQQueue(IMessageContent.QueueOne);
     }
-    @Bean(name = "queueAgain")
+    @Bean(name = IMessageContent.QueueAgain)
     public Queue queueAgain(){
-        return new ActiveMQQueue(QueueAgain);
+        return new ActiveMQQueue(IMessageContent.QueueAgain);
     }
-    @Bean(name = "back")
+    @Bean(name = IMessageContent.QueueBack)
     public Queue queueBack() {
-        return new ActiveMQQueue(QueueBack);
+        return new ActiveMQQueue(IMessageContent.QueueBack);
     }
-    @Bean(name = "backAgain")
+    @Bean(name = IMessageContent.QueueBackAgain)
     public Queue queueBackAgain() {
-        return new ActiveMQQueue(QueueBackAgain);
+        return new ActiveMQQueue(IMessageContent.QueueBackAgain);
     }
 
 

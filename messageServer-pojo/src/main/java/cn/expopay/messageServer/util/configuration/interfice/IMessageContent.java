@@ -3,6 +3,14 @@ package cn.expopay.messageServer.util.configuration.interfice;
 public interface IMessageContent {
 
     /**
+     * 消息队列名称
+     */
+    public final static String QueueOne = "queueOne";
+    public final static String QueueAgain = "queueAgain";
+    public final static String QueueBack = "queueBack";
+    public final static String QueueBackAgain = "queueBackAgain";
+
+    /**
      * Send
      */
     public static final int SendMessageTotalNum = 10;

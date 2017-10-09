@@ -103,7 +103,7 @@ public class QueueBackLocalProcessing extends AbstractQueueLocalProcessing {
         messageService.updateMessageInfo(queueMessageStore);
 
         if(backAgain){
-            producerServiceBack.publishConvertPostProcessor("queueBackAgain" ,bqm, delayTime);
+            producerServiceBack.publishConvertPostProcessor(IMessageContent.QueueBackAgain, bqm, delayTime);
         }
     }
 }

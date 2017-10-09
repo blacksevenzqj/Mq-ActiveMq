@@ -17,9 +17,9 @@ public class JmsContainerConfig {
     @Autowired
     Queue queueAgain;
     @Autowired
-    Queue back;
+    Queue queueBack;
     @Autowired
-    Queue backAgain;
+    Queue queueBackAgain;
 
     @Autowired
     MessageListenerAdapter jmsMessageListenerAdapterOne;
@@ -53,7 +53,7 @@ public class JmsContainerConfig {
     public DefaultMessageListenerContainer jmsDefaultMessageListenerContainerBack(ConnectionFactory activeMQConnectionFactory){
         DefaultMessageListenerContainer defaultMessageListenerContainer = new DefaultMessageListenerContainer();
         defaultMessageListenerContainer.setConnectionFactory(activeMQConnectionFactory);
-        defaultMessageListenerContainer.setDestination(back);
+        defaultMessageListenerContainer.setDestination(queueBack);
         defaultMessageListenerContainer.setMessageListener(jmsMessageListenerAdapterBack);
         return defaultMessageListenerContainer;
     }
@@ -62,7 +62,7 @@ public class JmsContainerConfig {
     public DefaultMessageListenerContainer jmsDefaultMessageListenerContainerBackAgain(ConnectionFactory activeMQConnectionFactory){
         DefaultMessageListenerContainer defaultMessageListenerContainer = new DefaultMessageListenerContainer();
         defaultMessageListenerContainer.setConnectionFactory(activeMQConnectionFactory);
-        defaultMessageListenerContainer.setDestination(backAgain);
+        defaultMessageListenerContainer.setDestination(queueBackAgain);
         defaultMessageListenerContainer.setMessageListener(jmsMessageListenerAdapterBackAgain);
         return defaultMessageListenerContainer;
     }

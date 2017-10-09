@@ -71,7 +71,7 @@ public class BusinessServiceImpl implements IBusinessService{
             insertMessage(rmq, sendMessage);
 
             if (sendMessageStatus) {
-                producerServiceSend.sendMessage("queueOne", qm);
+                producerServiceSend.sendMessage(IMessageContent.QueueOne, qm);
                 producers.mark();
             }else{
                 requestFailCount.inc();
