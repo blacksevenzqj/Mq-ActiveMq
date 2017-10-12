@@ -16,27 +16,56 @@ public class MetricSpringBootConfig {
         return new MetricRegistry();
     }
 
-    @Bean(name = "consumers")
-    public Meter consumers(MetricRegistry metrics) {
-        return metrics.meter("consumers");
+    /**
+     * 在请求阶段直接失败次数统计（没进MQ）
+     */
+    @Bean(name = "requestFailCount")
+    public Counter requestFailCount(MetricRegistry metrics) {
+        return metrics.counter("requestFailCount");
     }
+
     @Bean(name = "producers")
     public Meter producers(MetricRegistry metrics) {
         return metrics.meter("producers");
     }
 
-    @Bean(name = "compareRatio")
-    public CompareRatio compareRatio(MetricRegistry metrics, Meter consumers, Meter producers) {
-        CompareRatio compareRatio = new CompareRatio(consumers, producers);
+    /**
+     * 在首队列阶段请求成功统计
+     */
+    @Bean(name = "consumerOne")
+    public Meter consumers(MetricRegistry metrics) {
+        return metrics.meter("consumerOne");
+    }
+    @Bean(name = "compareRatioOne")
+    public CompareRatio compareRatio(MetricRegistry metrics, Meter consumerOne, Meter producers) {
+        CompareRatio compareRatio = new CompareRatio(consumerOne, producers);
         // 生产者消费者比率
-        metrics.register("ProducerConsumerRatio", compareRatio);
+        metrics.register("ProducerConsumerRatioOne", compareRatio);
         return compareRatio;
     }
 
-    @Bean(name = "requestFailCount")
-    public Counter requestFailCount(MetricRegistry metrics) {
-        return metrics.counter("requestFailCount");
+    /**
+     * 在重试阶段：请求成功统计
+     */
+    @Bean(name = "consumerAgain")
+    public Meter consumerAgain(MetricRegistry metrics) {
+        return metrics.meter("consumerAgain");
     }
+    @Bean(name = "compareRatioAgain")
+    public CompareRatio compareRatioAgain(MetricRegistry metrics, Meter consumerAgain, Meter producers) {
+        CompareRatio compareRatio = new CompareRatio(consumerAgain, producers);
+        // 生产者消费者比率
+        metrics.register("ProducerConsumerRatioAgain", compareRatio);
+        return compareRatio;
+    }
+    /**
+     * 在重试阶段：超过重试次数的请求失败次数统计
+     */
+    @Bean(name = "againFailCount")
+    public Counter againFailCount(MetricRegistry metrics) {
+        return metrics.counter("againFailCount");
+    }
+
 
     /**
      * Reporter 数据的展现位置

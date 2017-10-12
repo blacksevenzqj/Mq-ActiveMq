@@ -55,7 +55,7 @@ public class TestControl {
         try {
             RsaConfigModel rsaConfigModel = RsaParameterValidation.getRsaProperties("one");
             rs = RsaParameterValidation.checkParamterBackSender(backMessage, rsaConfigModel.getPublicKey(), rsaConfigModel.getPrivateKey());
-//            Thread.currentThread().sleep(3000);
+            Thread.currentThread().sleep(3000);
         }catch (Exception e){
             e.printStackTrace();
         }

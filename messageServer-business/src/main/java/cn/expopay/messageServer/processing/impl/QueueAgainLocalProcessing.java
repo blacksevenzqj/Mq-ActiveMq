@@ -16,6 +16,8 @@ import cn.expopay.messageServer.util.dateutil.DateUtil;
 import cn.expopay.messageServer.util.encryption.RsaParameterValidation;
 import cn.expopay.messageServer.util.http.HttpManagerSendClient;
 import cn.expopay.messageServer.util.resultsvalidation.ResultsCodeValidation;
+import com.codahale.metrics.Counter;
+import com.codahale.metrics.Meter;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +36,12 @@ public class QueueAgainLocalProcessing extends AbstractQueueLocalProcessing {
 
     @Autowired
     private HttpManagerSendClient httpManagerSendClient;
+
+    @Autowired
+    Meter consumerAgain;
+
+    @Autowired
+    Counter againFailCount;
 
     @Override
     public void queueLocalProcessing(Object obj, IProducerService producerServiceSend, IProducerService producerServiceBack) {
@@ -57,7 +65,7 @@ public class QueueAgainLocalProcessing extends AbstractQueueLocalProcessing {
 
         if(ResultsCodeValidation.sendRsultsCodeValidation(callbackResult.getCode())){
             queueMessageStore.setProcessEndSend(IMessageContent.GeneralStateThree);
-            //如果第一次重试就请求成功，则将返回结果放入到回复队列中。
+            againFailCount.inc();
         } else if (callbackResult == null || callbackResult.getCode() != IMessageContent.HttpCodeSucess){
             if(currentNum < totalNum) {
                 int tempNum = currentNum + 1;
@@ -68,9 +76,11 @@ public class QueueAgainLocalProcessing extends AbstractQueueLocalProcessing {
             }else{
                 logger.info("消息发送当前重试次数为" + currentNum + "，超过" + totalNum + "了！");
                 queueMessageStore.setProcessEndSend(IMessageContent.GeneralStateThree);
+                againFailCount.inc();
             }
         }else{
             queueMessageStore.setProcessEndSend(IMessageContent.GeneralStateTwo);
+            consumerAgain.mark();
         }
 
         if(!serviceAgain){

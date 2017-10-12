@@ -37,7 +37,7 @@ public class QueueOneLocalProcessing extends AbstractQueueLocalProcessing {
     private HttpManagerSendClient httpManagerSendClient;
 
     @Autowired
-    Meter consumers;
+    Meter consumerOne;
 
     @Override
     public void queueLocalProcessing(Object obj, IProducerService producerServiceSend, IProducerService producerServiceBack) {
@@ -68,7 +68,7 @@ public class QueueOneLocalProcessing extends AbstractQueueLocalProcessing {
             serviceAgain = true;
         } else {
             queueMessageStore.setProcessEndSend(IMessageContent.GeneralStateTwo);
-            consumers.mark();
+            consumerOne.mark();
         }
 
         if(!serviceAgain){
