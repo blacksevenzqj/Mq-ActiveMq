@@ -11,6 +11,11 @@ public interface IMessageContent {
     public final static String QueueBackAgain = "queueBackAgain";
 
     /**
+     * MQ的RSA名称
+     */
+    public final static String MqRsaId = "public";
+
+    /**
      * Send
      */
     public static final int SendMessageTotalNum = 10;

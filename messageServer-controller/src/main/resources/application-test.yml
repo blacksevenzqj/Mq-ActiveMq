@@ -28,17 +28,17 @@ spring:
      verifyServerCertificate: false
 # ActiveMQ 配置
   activemq:
-      broker-url: failover:(tcp://10.66.140.33:61616)
-      user: admin
-      password: admin
-      useAsyncSend: true
-      alwaysSessionAsync: true
-      dispatchAsync: true
-      pool:
-        enabled:  true
-        max-connections: 100
-        expiry-timeout: 10000
-        idle-timeout: 30000
+    broker-url: failover:(tcp://10.66.140.33:61616)
+    user: admin
+    password: admin
+    useAsyncSend: true
+    alwaysSessionAsync: true
+    dispatchAsync: true
+    pool:
+      enabled:  true
+      max-connections: 100
+      expiry-timeout: 10000
+      idle-timeout: 30000
 
 # Mybatis 配置
 mybatis:

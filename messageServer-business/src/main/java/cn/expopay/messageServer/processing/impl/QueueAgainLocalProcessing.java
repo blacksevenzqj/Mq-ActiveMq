@@ -89,7 +89,7 @@ public class QueueAgainLocalProcessing extends AbstractQueueLocalProcessing {
 
                 String keyVersion = qm.getSendMessage().getKeyVersion().toLowerCase();
                 try {
-                    RsaConfigModel rsaConfigModel = RsaParameterValidation.getRsaProperties(keyVersion);
+                    RsaConfigModel rsaConfigModel = RsaParameterValidation.getRsaProperties(IMessageContent.MqRsaId);
                     if(rsaConfigModel == null){
                         throw new RuntimeException(IMessageContent.SendMessageKeyVersionIsErrorStr);
                     }

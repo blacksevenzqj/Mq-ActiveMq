@@ -30,7 +30,7 @@
     <property name="PATTERN" value="%-12(%d{yyyy-MM-dd HH:mm:ss.SSS}) %highlight(%-5level) [%L] [%thread] %cyan(%logger{80}): %msg%n" />
     <!-- 文件路径 -->
     <property name="LOG_HOME" value="D:/logs/Message_Server" />
-    <!--<property name="LOG_HOME" value="/opt/server_log/posFrontServer" />-->
+    <property name="LINUX_LOG_HOME" value="/home/activeMQSendMessage/logs" />
     <property name="LOG.MAX.SIZE" value="100MB" /> <!-- 日志文件大小,超过这个大小将被压缩 -->
 
     <!-- 开发环境 -->
@@ -74,11 +74,11 @@
         <!-- 每天产生一个文件 -->
         <appender name="TEST_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <!-- 文件路径 -->
-            <file>${LOG_HOME}/access.log</file>
+            <file>${LINUX_LOG_HOME}/access.log</file>
             <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
                 <!-- 文件名称 -->
                 <!-- 非当天的Log文件压缩备份为zip -->
-                <fileNamePattern>${LOG_HOME}/access.%d{yyyy-MM-dd}.%i.zip</fileNamePattern>
+                <fileNamePattern>${LINUX_LOG_HOME}/access.%d{yyyy-MM-dd}.%i.zip</fileNamePattern>
                 <!-- 文件输出日志 (文件大小策略进行文件输出，超过指定大小对文件备份) -->
                 <timeBasedFileNamingAndTriggeringPolicy
                         class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">

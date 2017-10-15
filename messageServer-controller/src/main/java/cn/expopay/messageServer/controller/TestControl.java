@@ -9,6 +9,7 @@ import cn.expopay.messageServer.model.send.SendMessage;
 import cn.expopay.messageServer.model.store.QueueMessageStore;
 import cn.expopay.messageServer.model.returninfo.ReturnSender;
 import cn.expopay.messageServer.util.configuration.MessageContentConfiguration;
+import cn.expopay.messageServer.util.configuration.interfice.IMessageContent;
 import cn.expopay.messageServer.util.encryption.RsaParameterValidation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,9 +54,10 @@ public class TestControl {
         logger.info("backMessage is " + backMessage);
         ReturnSender rs = null;
         try {
-            RsaConfigModel rsaConfigModel = RsaParameterValidation.getRsaProperties("one");
-            rs = RsaParameterValidation.checkParamterBackSender(backMessage, rsaConfigModel.getPublicKey(), rsaConfigModel.getPrivateKey());
-            Thread.currentThread().sleep(3000);
+            RsaConfigModel rsaConfigModelMq = RsaParameterValidation.getRsaProperties(IMessageContent.MqRsaId);
+            RsaConfigModel rsaConfigModelSender = RsaParameterValidation.getRsaProperties("one");
+            rs = RsaParameterValidation.checkParamterBackSender(backMessage, rsaConfigModelMq.getPublicKey(), rsaConfigModelSender.getPrivateKey());
+//            Thread.currentThread().sleep(3000);
         }catch (Exception e){
             e.printStackTrace();
         }
