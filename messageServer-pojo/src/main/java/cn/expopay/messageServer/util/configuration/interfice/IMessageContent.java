@@ -77,7 +77,5 @@ public interface IMessageContent {
     public static final String SendMessageKeyVersionIsErrorStr = "keyVersion 版本号异常，没有与之对应的版本号，请检查核对";
     public static final String ReturnSignParamterLastErrorStr = "返回加签：keyVersion 版本号异常，没有与之对应的版本号，请检查核对";
 
-    public static final int SendMessageKeyIsNull = 10009;
-    public static final String SendMessageKeyIsNullStr = "KeyVersion 参数为Null 或 空字符串";
 }
 

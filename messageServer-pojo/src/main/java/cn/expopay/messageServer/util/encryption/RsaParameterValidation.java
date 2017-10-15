@@ -25,29 +25,24 @@ public class RsaParameterValidation {
     public static ReturnMq checkParamter(Object obj){
         ReturnMq rmq = new ReturnMq();
 //        rmq.setCode(IMessageContent.HttpCodeFail);
-        System.out.println(messageContentConfiguration.getMessageContentHttp());
+        logger.info("RsaParameterValidation 中使用了 MessageContentConfiguration配置：" + messageContentConfiguration.getMessageContentHttp());
         rmq.setCode(messageContentConfiguration.getMessageContentHttp().getHttpCodeFail());
         if (obj instanceof SendMessage) {
             RsaConfigModel rsaConfigModel = null;
             SendMessage sendMessage = (SendMessage) obj;
-            if (StringUtils.isBlank(sendMessage.getKeyVersion())) {
-                rmq.setCode(IMessageContent.SendMessageKeyIsNull);
-                rmq.setMsg(IMessageContent.SendMessageKeyIsNullStr);
-                return rmq;
-            }
-            // 拿取对应的KeyVersion版本号
-            String keyVersion = sendMessage.getKeyVersion().toLowerCase();
-            rsaConfigModel = getRsaProperties(keyVersion);
-            if (rsaConfigModel == null) {
-                logger.error("RsaParameterValidation are checkParamter error ");
-                rmq.setCode(IMessageContent.SendMessageKeyVersionIsError);
-                rmq.setMsg(IMessageContent.SendMessageKeyVersionIsErrorStr);
-                return rmq;
-            }
             String validateStr = ValidationUtil.validateModel(sendMessage);
             if (StringUtils.isNotBlank(validateStr)) {
                 rmq.setMsg(validateStr);
             } else {
+                // 拿取对应的KeyVersion版本号
+                String keyVersion = sendMessage.getKeyVersion().toLowerCase();
+                rsaConfigModel = getRsaProperties(keyVersion);
+                if (rsaConfigModel == null) {
+                    logger.error("RsaParameterValidation are checkParamter error ");
+                    rmq.setCode(IMessageContent.SendMessageKeyVersionIsError);
+                    rmq.setMsg(IMessageContent.SendMessageKeyVersionIsErrorStr);
+                    return rmq;
+                }
                 // 验签
                 boolean checkRestule = signatureParamter(obj, rsaConfigModel.getPublicKey());
                 if (checkRestule) {
@@ -60,7 +55,6 @@ public class RsaParameterValidation {
                         sendMessage.setTotalBackNum(IMessageContent.SendMessageTotalBackNum);
                     }
                 } else {
-                    // 验签失败，则不进行加签
                     rmq.setCode(IMessageContent.SendMessageSignatureFail);
                     rmq.setMsg(IMessageContent.SendMessageSignatureFailStr);
                 }
@@ -88,14 +82,9 @@ public class RsaParameterValidation {
     }
 
     // 返回加签（最后阶段）
-    public static ReturnMq returnSignParamterLast(ReturnMq rmq, SendMessage sendMessage){
-        if(StringUtils.isBlank(sendMessage.getKeyVersion())){
-            rmq.setMsg(rmq.getMsg() + "。" + IMessageContent.SendMessageKeyIsNullStr);
-            return rmq;
-        }
-        // 拿取对应的KeyVersion版本号
-        String keyVersion = sendMessage.getKeyVersion().toLowerCase();
-        RsaConfigModel rsaConfigModel = getRsaProperties(keyVersion);
+    public static ReturnMq returnSignParamterLast(ReturnMq rmq){
+        // 拿取Mq的私钥
+        RsaConfigModel rsaConfigModel = RsaParameterValidation.getRsaProperties(IMessageContent.MqRsaId);
         if(rsaConfigModel == null){
             logger.error("RsaParameterValidation are returnSignParamterLast error ");
             rmq.setMsg(rmq.getMsg() + "。" + IMessageContent.ReturnSignParamterLastErrorStr);

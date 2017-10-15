@@ -58,15 +58,13 @@ public class BusinessServiceImpl implements IBusinessService{
                     rmq.setCode(IMessageContent.HttpCodeFail);
                     rmq.setMsg(rmq.getMsg() + "。" + e.getMessage());
                 }
-                // 返回加签
-                if (rmq.getCode() != IMessageContent.SendMessageKeyVersionIsError &&
-                        rmq.getCode() != IMessageContent.SendMessageSignatureFail &&
-                        rmq.getCode() != IMessageContent.SendMessageKeyIsNull) {
-                    RsaParameterValidation.returnSignParamterLast(rmq, sendMessage);
-                }
             } else {
                 rmq = new ReturnMq(IMessageContent.HttpCodeFail, "请求消息为Null，请检查核对");
             }
+
+            // Mq返回加签
+            RsaParameterValidation.returnSignParamterLast(rmq);
+
             // 请求消息入库
             insertMessage(rmq, sendMessage);
 
