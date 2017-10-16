@@ -1,6 +1,5 @@
 package cn.expopay.messageServer.util.encryption;
 
-//import com.sun.org.apache.xml.internal.security.utils.Base64;
 import java.util.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,19 +30,13 @@ public class RSASignature{
     public static String sign(String content, String privateKey, String encode) {
         try
         {
-//            PKCS8EncodedKeySpec priPKCS8    = new PKCS8EncodedKeySpec( Base64.decode(privateKey) );
             PKCS8EncodedKeySpec priPKCS8 = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(privateKey));
             KeyFactory keyf = KeyFactory.getInstance("RSA");
             PrivateKey priKey = keyf.generatePrivate(priPKCS8);
-
             Signature signature = Signature.getInstance(SIGN_ALGORITHMS);
-
             signature.initSign(priKey);
-            signature.update( content.getBytes(encode));
-
+            signature.update(content.getBytes(encode));
             byte[] signed = signature.sign();
-
-//            return Base64.encode(signed);
             return Base64.getEncoder().encodeToString(signed);
         }
         catch (Exception e)
@@ -59,15 +52,13 @@ public class RSASignature{
         try
         {
             // 私钥的秘钥规范
-//            PKCS8EncodedKeySpec priPKCS8 = new PKCS8EncodedKeySpec( Base64.decode(privateKey) );
             PKCS8EncodedKeySpec priPKCS8 = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(privateKey));
             KeyFactory keyf = KeyFactory.getInstance("RSA");
             PrivateKey priKey = keyf.generatePrivate(priPKCS8);
             Signature signature = Signature.getInstance(SIGN_ALGORITHMS);
             signature.initSign(priKey);
-            signature.update( content.getBytes());
+            signature.update(content.getBytes());
             byte[] signed = signature.sign();
-//            return Base64.encode(signed);
             return Base64.getEncoder().encodeToString(signed);
         }
         catch (Exception e)
@@ -86,22 +77,16 @@ public class RSASignature{
      * @param encode 字符集编码
      * @return 布尔值
      */
-    public static boolean doCheck(String content, String sign, String publicKey,String encode)
+    public static boolean doCheck(String content, String sign, String publicKey, String encode)
     {
         try
         {
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-//            byte[] encodedKey = Base64.decode(publicKey);
             byte[] encodedKey = Base64.getDecoder().decode(publicKey);
             PublicKey pubKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-
-            Signature signature = Signature
-                    .getInstance(SIGN_ALGORITHMS);
-
+            Signature signature = Signature.getInstance(SIGN_ALGORITHMS);
             signature.initVerify(pubKey);
-            signature.update( content.getBytes(encode) );
-
-//            boolean bverify = signature.verify( Base64.decode(sign) );
+            signature.update(content.getBytes(encode));
             boolean bverify = signature.verify( Base64.getDecoder().decode(sign));
             return bverify;
         }
@@ -118,20 +103,14 @@ public class RSASignature{
         try
         {
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-//            byte[] encodedKey = Base64.decode(publicKey);
             byte[] encodedKey = Base64.getDecoder().decode(publicKey);
             PublicKey pubKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-
-            Signature signature = Signature
-                    .getInstance(SIGN_ALGORITHMS);
-
+            Signature signature = Signature.getInstance(SIGN_ALGORITHMS);
             signature.initVerify(pubKey);
-            signature.update( content.getBytes() );
-
-//            boolean bverify = signature.verify( Base64.decode(sign) );
+//            signature.update(content.getBytes());
+            signature.update(content.getBytes("UTF-8"));
             boolean bverify = signature.verify( Base64.getDecoder().decode(sign));
             return bverify;
-
         }
         catch (Exception e)
         {

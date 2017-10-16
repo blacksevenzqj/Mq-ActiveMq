@@ -76,7 +76,7 @@ public class RsaParameterValidation {
                     sendMessage.getReceptionUrl() + sendMessage.getDataContent() +
                     sendMessage.getReqSucessMatch() + sendMessage.getKeyVersion();
 
-            checkRestule =  RSASignature.doCheck(content, sendMessage.getSignSendSender(), publicKey);
+            checkRestule =  RSASignature.doCheck(content, sendMessage.getSignSendSender(), publicKey, "UTF-8");
         }
         return checkRestule;
     }
@@ -105,12 +105,10 @@ public class RsaParameterValidation {
         if(obj instanceof ReturnMq){
             ReturnMq rmq = (ReturnMq)obj;
             String content = rmq.getCode() + rmq.getMsg();
-            signSendMq = RSASignature.sign(content, privateKey);
+            signSendMq = RSASignature.sign(content, privateKey, "UTF-8");
         }
         return signSendMq;
     }
-
-
 
     // 回复消息：请求加签
     public static String signParamter(Object obj, String privateKey){
@@ -120,7 +118,7 @@ public class RsaParameterValidation {
             String content = backMessage.getSendId() + backMessage.getBackTime() +
                     backMessage.getCode() + backMessage.getMsg();
 
-            signBackMq = RSASignature.sign(content, privateKey);
+            signBackMq = RSASignature.sign(content, privateKey, "UTF-8");
         }
         return signBackMq;
     }
@@ -131,7 +129,7 @@ public class RsaParameterValidation {
         if(obj instanceof ReturnSender){
             ReturnSender rs = (ReturnSender)obj;
             String content = rs.getCode() + rs.getMsg();
-            checkRestule =  RSASignature.doCheck(content, rs.getSignBackSender(), publicKey);
+            checkRestule =  RSASignature.doCheck(content, rs.getSignBackSender(), publicKey, "UTF-8");
         }
         return checkRestule;
     }
@@ -180,7 +178,7 @@ public class RsaParameterValidation {
             String content = backMessage.getSendId() + backMessage.getBackTime() +
                     backMessage.getCode() + backMessage.getMsg();
 
-            checkRestule = RSASignature.doCheck(content, backMessage.getSignBackMq(), publicKey);
+            checkRestule = RSASignature.doCheck(content, backMessage.getSignBackMq(), publicKey, "UTF-8");
         }
         return checkRestule;
     }
@@ -191,7 +189,7 @@ public class RsaParameterValidation {
         if(obj instanceof ReturnSender){
             ReturnSender rs = (ReturnSender)obj;
             String content = rs.getCode() + rs.getMsg();
-            signBackSender = RSASignature.sign(content, privateKey);
+            signBackSender = RSASignature.sign(content, privateKey, "UTF-8");
         }
         return signBackSender;
     }
