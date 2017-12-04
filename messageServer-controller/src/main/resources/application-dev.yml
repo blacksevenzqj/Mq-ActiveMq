@@ -1,6 +1,7 @@
 # 基础配置
 server:
    port:  8082
+   contextPath: /messageServerController
 
 # 数据源配置
 spring:
@@ -8,7 +9,7 @@ spring:
      driver-class-name: com.mysql.jdbc.Driver
      url: jdbc:mysql://localhost:3306/messageservice?useUnicode=true&characterEncoding=utf8&useSSL=false
      username: root
-     password: root
+     password: 123456
      type: com.alibaba.druid.pool.DruidDataSource
      filters: stat
      maxActive: 100

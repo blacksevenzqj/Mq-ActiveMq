@@ -35,12 +35,13 @@ public class InitializationConfiguration {
         // Akka初始化
         ActorFactory.getMasterActorRef();
 
-        // 启动Metric，单例形式
+        // 自己实现的：启动Metric，单例形式
 //        MetricConfig.getMetricConfig().startMetric();
 
-        consoleReporter.start(10, TimeUnit.SECONDS);
+        // 使用Spring Boot配置的
+//        consoleReporter.start(10, TimeUnit.SECONDS);
 
-        influxdbReporter.start(10, TimeUnit.SECONDS);
+//        influxdbReporter.start(10, TimeUnit.SECONDS);
     }
 
     @PreDestroy

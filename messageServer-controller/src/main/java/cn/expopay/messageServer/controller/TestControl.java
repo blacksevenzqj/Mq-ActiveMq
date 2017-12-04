@@ -11,6 +11,7 @@ import cn.expopay.messageServer.model.returninfo.ReturnSender;
 import cn.expopay.messageServer.util.configuration.MessageContentConfiguration;
 import cn.expopay.messageServer.util.configuration.interfice.IMessageContent;
 import cn.expopay.messageServer.util.encryption.RsaParameterValidation;
+import org.firefly.example.providerservice.ServiceTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class TestControl {
     @Autowired
     MessageContentConfiguration messageContentConfiguration;
 
+    @Autowired
+    ServiceTest serviceTest;
+
     //模拟第三个系统：消息接收方，接收消息
     @RequestMapping(value = "/queuemq/receive")
     @ResponseBody
@@ -39,7 +43,7 @@ public class TestControl {
 //        logger.info("queueMqReceive is " + orderInfo);
         logger.info("queueMqReceive is " + dataContent);
         try {
-            Thread.currentThread().sleep(3000);
+//            Thread.currentThread().sleep(3000);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -132,5 +136,12 @@ public class TestControl {
         return "123";
     }
 
+
+    @RequestMapping(value = "/queuemq/myTestFireFly")
+    public String myTestFireFly(HttpServletRequest request) {
+        ServiceTest.ResultClass result1 = serviceTest.sayHello("jupiter");
+        logger.info("测试：" + result1);
+        return result1.toString();
+    }
 
 }

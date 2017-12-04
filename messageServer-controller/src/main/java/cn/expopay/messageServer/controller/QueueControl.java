@@ -21,12 +21,31 @@ public class QueueControl {
      * 2、如果请求参数JSON字符串为""空字符串，则不会进入方法，而是由框架直接返回错误：Required request body is missing
      * 3、如果请求参数JOSN字符串为" "空格的空字符串，则不会进入方法，而是由框架直接返回错误：No content to map due to end-of-input(JackSon )
      */
-    @RequestMapping(value = "/queuemq/send")
+    @RequestMapping(value = "/queuemq/send1", method = RequestMethod.POST)
     @ResponseBody
-    public ReturnMq queueMqSend (@RequestBody SendMessage sendMessage) {
+    public ReturnMq queueMqSend1 (@RequestBody SendMessage sendMessage) {
         logger.info("QueueControl are SendMessage is " + sendMessage);
-        ReturnMq rmq = businessService.sendMessageOne(sendMessage);
-        return rmq;
+//        ReturnMq rmq = businessService.sendMessageOne(sendMessage);
+//        return rmq;
+        return null;
+    }
+
+
+    // K V方式1：
+    @RequestMapping(value = "/queuemq/send2", method = RequestMethod.POST)
+    @ResponseBody
+    public ReturnMq queueMqSend2 (String jsonParam) {
+        logger.info("QueueControl are jsonParam is " + jsonParam);
+//        ReturnMq rmq = businessService.sendMessageOne(sendMessage);
+        return null;
+    }
+    // K V方式2：
+    @RequestMapping(value = "/queuemq/send3", method = RequestMethod.POST)
+    @ResponseBody
+    public ReturnMq queueMqSend3 (SendMessage sendMessage) {
+        logger.info("QueueControl are SendMessage is " + sendMessage);
+//        ReturnMq rmq = businessService.sendMessageOne(sendMessage);
+        return null;
     }
 
 }
