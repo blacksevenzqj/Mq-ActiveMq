@@ -103,7 +103,7 @@ public class ThreadControl {
 
     public static void destory() {
         if(ThreadControlHandler.tc.newRetractedThreadPool() != null && ThreadControlHandler.tc.newRetractedThreadPool().size() > 0) {
-            for(ThreadPoolExecutor tpe:ThreadControlHandler.tc.newRetractedThreadPool()){
+            for(ThreadPoolExecutor tpe : ThreadControlHandler.tc.newRetractedThreadPool()){
                 tpe.shutdown();
             }
         }
