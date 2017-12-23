@@ -89,7 +89,7 @@ public class ThreadControl {
         List<ThreadPoolExecutor> list = getThreadPoolExecutor();
         int serialNumber = 0;
         if(list != null && list.size() > 1) {
-            for(int i = 0; i < list.size()-1; i++){
+            for(int i = 0; i < list.size(); i++){
                 if(list.get(i).getActiveCount() < list.get(i + 1).getActiveCount()) {
                     serialNumber = i;
                 }
